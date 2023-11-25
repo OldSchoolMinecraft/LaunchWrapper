@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 repositories {
@@ -19,8 +20,8 @@ repositories {
 group = 'org.mcphackers'
 archivesBaseName = 'launchwrapper'
 version = '1.0-SNAPSHOT'
-sourceCompatibility = 1.5
-targetCompatibility = 1.5
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 dependencies {
     implementation 'org.mcphackers.rdi:rdi:1.0'

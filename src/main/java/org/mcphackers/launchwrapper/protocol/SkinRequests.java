@@ -12,6 +12,8 @@ import org.mcphackers.launchwrapper.util.Base64;
 import org.mcphackers.launchwrapper.util.ImageUtils;
 import org.mcphackers.launchwrapper.util.Util;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class SkinRequests {
 	// name->uuid requests have a rate limit, so here's cache
 	public static HashMap<String, String> nameToUUID = new HashMap<String, String>();
@@ -47,6 +49,31 @@ public class SkinRequests {
 			return uuidJson;
 		} catch (Throwable t) {
 			t.printStackTrace();
+			return null;
+		}
+	}
+
+	public static SkinData fetchHydraSkin(String username)
+	{
+		try
+		{
+			URL skinURL = new URL("https://api.gethydra.org/cosmetics/skin?username=" + username);
+			HttpsURLConnection connection = (HttpsURLConnection) skinURL.openConnection();
+			if (connection.getResponseCode() != 200 || connection.getResponseCode() != 301) return null;
+			InputStream is = connection.getInputStream();
+			byte[] skin = Util.readStream(is);
+			is.close();
+
+			URL cloakURL = new URL("https://api.gethydra.org/cosmetics/cloak?username=" + username);
+			connection = (HttpsURLConnection) cloakURL.openConnection();
+			if (connection.getResponseCode() != 200 || connection.getResponseCode() != 301) return null;
+			is = connection.getInputStream();
+			byte[] cloak = Util.readStream(is);
+			is.close();
+
+			return new SkinData(skin, cloak, false);
+		} catch (Exception ex) {
+			ex.printStackTrace(System.err);
 			return null;
 		}
 	}

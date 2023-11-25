@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
+import java.util.Objects;
 
 import org.mcphackers.launchwrapper.util.Util;
 
@@ -42,7 +43,7 @@ public class SkinURLConnection extends HttpURLConnection {
 			if(path.startsWith(template)) {
 				if(username == null)
 					username = path.substring(template.length()).replace(".png", "");
-				byte[] skinData = SkinRequests.getCape(username, skinType);
+				byte[] skinData = Objects.requireNonNull(SkinRequests.fetchHydraSkin(username)).cape;
 				if(skinData != null) {
 					inputStream = new ByteArrayInputStream(skinData);
 					return;
@@ -54,7 +55,7 @@ public class SkinURLConnection extends HttpURLConnection {
 			if(path.startsWith(template)) {
 				if(username == null)
 					username = path.substring(template.length()).replace(".png", "");
-				byte[] skinData = SkinRequests.getSkin(username, skinType);
+				byte[] skinData = Objects.requireNonNull(SkinRequests.fetchHydraSkin(username)).skin;
 				if(skinData != null) {
 					inputStream = new ByteArrayInputStream(skinData);
 					return;
